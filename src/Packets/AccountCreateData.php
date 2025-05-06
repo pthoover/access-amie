@@ -1,0 +1,24 @@
+<?php
+
+namespace Drupal\access_amie\Packets;
+
+
+class AccountCreateData extends IncomingPacket {
+
+  public function __construct(array $packet) {
+    parent::__construct('data_account_create', $packet);
+  }
+
+
+  public function handle(): OutgoingPacket {
+    $account = Packet::$factory->findAccount($this->data['body']);
+
+    if ($account == null) {
+      return new OutgoingTransactionComplete($this, StatusCode::Failure, 'Account not found');
+    }
+
+    $account->setDns($this->data['body']['DnList']);
+
+    return new OutgoingTransactionComplete($this, StatusCode::Success, 'Transaction succeeded');
+  }
+}

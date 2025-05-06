@@ -1,0 +1,4 @@
+services:
+  access_amie.amie_client:
+    class: Drupal\access_amie\Service\AmieClient
+    arguments: ['@config.factory', '@http_client', '@logger.factory', '@key.repository']

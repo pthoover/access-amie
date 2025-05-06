@@ -1,0 +1,5 @@
+access_amie.settings:
+  title: 'ACCESS AMIE settings'
+  description: 'Configure settings for ACCESS AMIE.'
+  route_name: access_amie.settings
+  parent: system.admin_config_services

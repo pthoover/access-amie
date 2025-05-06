@@ -1,0 +1,13 @@
+access_amie.settings:
+  type: config_object
+  label: 'Access AMI settings'
+  mapping:
+    api_key_id:
+      type: 'string'
+      label: 'ID of the Drupal Key that contains the API key'
+    site_name:
+      type: 'string'
+      label: 'Name of the local site'
+    rest_url:
+      type: 'uri'
+      label: 'URL for the remote AMIE REST service'

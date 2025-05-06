@@ -1,0 +1,9 @@
+name: 'ACCESS AMIE'
+type: module
+description: 'Interaction with the ACCESS AMIE API'
+package: CloudBank
+core_version_requirement: ^10
+php: 8.3
+configure: access_amie.settings
+dependencies:
+  - drupal:key

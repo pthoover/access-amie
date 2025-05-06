@@ -1,0 +1,7 @@
+access_amie.settings:
+  path: '/admin/config/services/access-amie-support'
+  defaults:
+    _title: 'ACCESS AMIE Settings'
+    _form: '\Drupal\access_amie\Form\ModuleSettingsForm'
+  requirements:
+    _permission: 'administer modules'
