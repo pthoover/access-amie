@@ -2,32 +2,41 @@
 
 namespace Drupal\access_amie\Packets;
 
-use Drupal\access_amie\Entities\Project;
+
+/**
+ *
+ */
+class CreateProjectSupplement extends CreateProject {
+
+  // constructor
 
 
-class CreateProjectSupplement extends IncomingPacket {
-
+  /**
+   *
+   */
   public function __construct(array $packet) {
-    parent::__construct('request_project_create', $packet);
+    parent::__construct($packet);
   }
 
 
+  // public methods
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function handle(): OutgoingPacket {
-    $project = Packet::$factory->findProject($this->data['body']);
+    $project = $this->findProject($this->data['body']);
 
     if ($project == null) {
-      $pi = Packet::$factory->findAccount($this->data['body']);
-
-      if ($pi == null) {
-        $pi = Packet::$factory->createAccount($this->data['body']);
-      }
-
-      $project = Packet::$factory->createProject($pi, $this->data['body']);
+      $pi = $this->findOrCreatePi($this->data['body']);
+      $project = $this->createProject($this->data['body'], $pi);
     }
 
-    $amount = floatval($this->packet['body']['ServiceUnitsAllocated']);
+    $amount = intval($this->data['body']['ServiceUnitsAllocated']);
+    $resource = $this->data['body']['AllocatedResource'];
 
-    $project->addTransfer($amount);
+    $project->transferFunds($amount, $resource);
 
     return new NotifyProjectCreate($this, $project);
   }

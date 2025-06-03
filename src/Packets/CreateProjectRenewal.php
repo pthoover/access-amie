@@ -2,39 +2,47 @@
 
 namespace Drupal\access_amie\Packets;
 
-use DateTimeImmutable;
-use DateTimeZone;
+use DateTime;
 
 
-class CreateProjectRenewal extends IncomingPacket {
+/**
+ *
+ */
+class CreateProjectRenewal extends CreateProject {
 
+  // constructor
+
+
+  /**
+   *
+   */
   public function __construct(array $packet) {
-    parent::__construct('request_project_create', $packet);
+    parent::__construct($packet);
   }
 
 
+  // public methods
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function handle(): OutgoingPacket {
-    $project = Packet::$factory->findProject($this->data['body']);
+    $project = $this->findProject($this->data['body']);
 
     if ($project == null) {
-      $pi = Packet::$factory->findAccount($this->data['body']);
-
-      if ($pi == null) {
-        $pi = Packet::$factory->createAccount($this->data['body']);
-      }
-
-      $project = Packet::$factory->createProject($pi, $this->data['body']);
+      $pi = $this->findOrCreatePi($this->data['body']);
+      $project = $this->createProject($this->data['body'], $pi);
     }
     else {
-      $end = new DateTimeImmutable($this->data['body']['EndDate'], new DateTimeZone('UTC'));
-
       $project->recoupFunds();
-      $project->setEndDate($end);
+      $project->setEndDate(new DateTime($this->data['body']['EndDate']));
     }
 
-    $amount = floatval($this->data['body']['ServiceUnitsAllocated']);
+    $amount = intval($this->data['body']['ServiceUnitsAllocated']);
+    $resource = $this->data['body']['AllocatedResource'];
 
-    $project->addTransfer($amount);
+    $project->transferFunds($amount, $resource);
 
     return new NotifyProjectCreate($this, $project);
   }

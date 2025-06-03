@@ -3,13 +3,28 @@
 namespace Drupal\access_amie\Packets;
 
 
+/**
+ *
+ */
 class ReactivateAccount extends IncomingPacket {
 
+  // constructor
+
+
+  /**
+   *
+   */
   public function __construct(array $packet) {
     parent::__construct('request_account_reactivate', $packet);
   }
 
 
+  // public methods
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function handle(): OutgoingPacket {
     $project = Packet::$factory->findProject($this->data['body']);
 
@@ -23,8 +38,8 @@ class ReactivateAccount extends IncomingPacket {
       return new OutgoingTransactionComplete($this, StatusCode::Failure, 'Account not found');
     }
 
-    if (!$account->isActive()) {
-      $account->setActive();
+    if (!$account->isActive($project)) {
+      $account->setActive(true, $project);
     }
 
     return new NotifyAccountReactivate($this, $account, $project);

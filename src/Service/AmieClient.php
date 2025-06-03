@@ -36,6 +36,9 @@ use GuzzleHttp\Client;
  */
 class AmieClient {
 
+  // properties
+
+
   /**
    * A container for this module's configuration settings
    *
@@ -63,6 +66,9 @@ class AmieClient {
   private Client $client;
 
 
+  // constructor
+
+
   /**
    * Constructor
    *
@@ -81,6 +87,10 @@ class AmieClient {
     $this->repository = $key_repo;
     $this->client = $client;
   }
+
+
+  // public methods
+
 
   /**
    *
@@ -285,7 +295,7 @@ class AmieClient {
   }
 
 
-  // private functions
+  // private methods
 
 
   /**

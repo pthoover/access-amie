@@ -3,13 +3,28 @@
 namespace Drupal\access_amie\Packets;
 
 
+/**
+ *
+ */
 class DeleteUser extends IncomingPacket {
 
+  // constructor
+
+
+  /**
+   *
+   */
   public function __construct(array $packet) {
     parent::__construct('request_user_modify', $packet);
   }
 
 
+  // public methods
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function handle(): OutgoingPacket {
     $account = Packet::$factory->findAccount($this->data['body']);
 
@@ -19,6 +34,6 @@ class DeleteUser extends IncomingPacket {
 
     $account->delete();
 
-    return new OutgoingTransactionComplete($this, StatusCode::Success, 'Transaction succeeded');
+    return new OutgoingTransactionComplete($this, StatusCode::Success, 'OK');
   }
 }

@@ -2,25 +2,39 @@
 
 namespace Drupal\access_amie\Packets;
 
-use DateTimeImmutable;
-use DateTimeZone;
+use DateTime;
 
 
-class CreateProjectExtension extends IncomingPacket {
+/**
+ *
+ */
+class CreateProjectExtension extends CreateProject {
 
+  // constructor
+
+
+  /**
+   *
+   */
   public function __construct(array $packet) {
-    parent::__construct('request_project_create', $packet);
+    parent::__construct($packet);
   }
 
 
+  // public methods
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function handle(): OutgoingPacket {
-    $project = Packet::$factory->findProject($this->data['body']);
+    $project = $this->findProject($this->data['body']);
 
     if ($project == null) {
       return new OutgoingTransactionComplete($this, StatusCode::Failure, 'Project not found');
     }
 
-    $end = new DateTimeImmutable($this->data['body']['EndDate'], new DateTimeZone('UTC'));
+    $end = new DateTime($this->data['body']['EndDate']);
 
     $project->setEndDate($end);
 

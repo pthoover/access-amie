@@ -3,13 +3,25 @@
 namespace Drupal\access_amie\Packets;
 
 
+/**
+ *
+ */
 enum StatusCode {
   case Success;
   case Failure;
 }
 
+/**
+ *
+ */
 class OutgoingTransactionComplete extends OutgoingPacket {
 
+  // constructor
+
+
+  /**
+   *
+   */
   public function __construct(IncomingPacket $packet, StatusCode $status, string $message) {
     if ($status == StatusCode::Success) {
       $status_code = 'Success';

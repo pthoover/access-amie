@@ -12,11 +12,18 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class ModuleSettingsForm extends ConfigFormBase {
 
+  // constructor
+
+
   /**
    * Constructor
    */
   public function __construct() {
   }
+
+
+  // public methods
+
 
   /**
    * {@inheritdoc}
@@ -84,6 +91,10 @@ class ModuleSettingsForm extends ConfigFormBase {
     $config->set('rest_url', $form_state->getValue('rest_url'));
     $config->save();
   }
+
+
+  // protected methods
+
 
   /**
    * {@inheritdoc}

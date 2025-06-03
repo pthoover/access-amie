@@ -3,32 +3,44 @@
 namespace Drupal\access_amie\Packets;
 
 
-class CreateProjectTransfer extends IncomingPacket {
+/**
+ *
+ */
+class CreateProjectTransfer extends CreateProject {
 
+  // constructor
+
+
+  /**
+   *
+   */
   public function __construct(array $packet) {
-    parent::__construct('request_project_create', $packet);
+    parent::__construct($packet);
   }
 
 
+  // public methods
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function handle(): OutgoingPacket {
-    $project = Packet::$factory->findProject($this->data['body']);
-    $amount = floatval($this->data['body']['ServiceUnitsAllocated']);
+    $project = $this->findProject($this->data['body']);
+    $amount = intval($this->data['body']['ServiceUnitsAllocated']);
 
     if ($project == null) {
       if ($amount < 0) {
         return new OutgoingTransactionComplete($this, StatusCode::Failure, 'Project not found');
       }
 
-      $pi = Packet::$factory->findAccount($this->data['body']);
-
-      if ($pi == null) {
-        $pi = Packet::$factory->createAccount($this->data['body']);
-      }
-
-      $project = Packet::$factory->createProject($pi, $this->data['body']);
+      $pi = $this->findOrCreatePi($this->data['body']);
+      $project = $this->createProject($this->data['body'], $pi);
     }
 
-    $project->addTransfer($amount);
+    $resource = $this->data['body']['AllocatedResource'];
+
+    $project->transferFunds($amount, $resource);
 
     return new NotifyProjectCreate($this, $project);
   }

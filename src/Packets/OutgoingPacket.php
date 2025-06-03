@@ -3,8 +3,27 @@
 namespace Drupal\access_amie\Packets;
 
 
+/**
+ *
+ */
 abstract class OutgoingPacket extends Packet {
 
+  // properties
+
+
+  /**
+   *
+   * @var int
+   */
+  private int $in_reply_to;
+
+
+  // constructor
+
+
+  /**
+   *
+   */
   protected function __construct(string $type, IncomingPacket $packet, array $body) {
     $data = [
       'type' => $type,
@@ -12,6 +31,19 @@ abstract class OutgoingPacket extends Packet {
       'body' => $body
     ];
 
-    parent::__construct($type, $packet->getPacketRecordId(), $packet->getTransactionRecordId(), $data);
+    parent::__construct($type, $packet->getTransactionRecordId(), $data);
+
+    $this->in_reply_to = $packet->getPacketRecordId();
+  }
+
+
+  // public methods
+
+
+  /**
+   *
+   */
+  public function getReplyTo(): int {
+    return $this->in_reply_to;
   }
 }

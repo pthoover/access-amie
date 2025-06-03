@@ -5,7 +5,13 @@ namespace Drupal\access_amie\Packets;
 use Drupal\access_amie\Entities\EntityFactory;
 
 
+/**
+ *
+ */
 abstract class Packet {
+
+  // properties
+
 
   /**
    *
@@ -23,12 +29,6 @@ abstract class Packet {
    *
    * @var int
    */
-  protected int $packet_rec_id;
-
-  /**
-   *
-   * @var int
-   */
   protected int $trans_rec_id;
 
   /**
@@ -38,12 +38,20 @@ abstract class Packet {
   protected array $data;
 
 
-  protected function __construct(string $type, int $packet_id, int $trans_id, array $data) {
+  // constructor
+
+
+  /**
+   *
+   */
+  protected function __construct(string $type, int $trans_id, array $data) {
     $this->packet_type = $type;
-    $this->packet_rec_id = $packet_id;
     $this->trans_rec_id = $trans_id;
     $this->data = $data;
   }
+
+
+  // public methods
 
 
   /**
@@ -60,14 +68,6 @@ abstract class Packet {
    */
   public function getPacketType(): string {
     return $this->packet_type;
-  }
-
-  /**
-   *
-   * @return int
-   */
-  public function getPacketRecordId(): int {
-    return $this->packet_rec_id;
   }
 
   /**

@@ -3,13 +3,28 @@
 namespace Drupal\access_amie\Packets;
 
 
+/**
+ *
+ */
 class AccountCreateData extends IncomingPacket {
 
+  // constructor
+
+
+  /**
+   *
+   */
   public function __construct(array $packet) {
     parent::__construct('data_account_create', $packet);
   }
 
 
+  // public methods
+
+
+  /**
+   * {@inheritdoc}
+   */
   public function handle(): OutgoingPacket {
     $account = Packet::$factory->findAccount($this->data['body']);
 
@@ -19,6 +34,6 @@ class AccountCreateData extends IncomingPacket {
 
     $account->setDns($this->data['body']['DnList']);
 
-    return new OutgoingTransactionComplete($this, StatusCode::Success, 'Transaction succeeded');
+    return new OutgoingTransactionComplete($this, StatusCode::Success, 'OK');
   }
 }

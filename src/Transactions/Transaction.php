@@ -4,13 +4,16 @@ namespace Drupal\access_amie\Transactions;
 
 use DateTimeImmutable;
 use DateTimeInterface;
-use Drupal\access_amie\Packets\RemotePacket;
+use Drupal\access_amie\Packets\PacketRecord;
 
 
 /**
  *
  */
 class Transaction {
+
+  // properties
+
 
   /**
    *
@@ -55,6 +58,12 @@ class Transaction {
   private array $packets;
 
 
+  // constructor
+
+
+  /**
+   *
+   */
   public function __construct(array $data) {
     $this->transaction_id = intval($data['transaction_id']);
     $this->originating_site = $data['originating_site_name'];
@@ -65,9 +74,12 @@ class Transaction {
     $this->packets = [];
 
     foreach ($data['DATA'] as $packet) {
-      $this->packets[] = new RemotePacket($packet);
+      $this->packets[] = new PacketRecord($packet);
     }
   }
+
+
+  // public methods
 
 
   /**
